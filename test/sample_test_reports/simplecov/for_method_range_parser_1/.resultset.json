@@ -1,0 +1,25 @@
+{
+  "Minitest": {
+    "coverage": {
+      "lib/oyencov/lib/oyencov.rb": {
+        "lines": [
+          1,
+          null,
+          null,
+          1,
+          1,
+          null,
+          1,
+          2,
+          null,
+          null,
+          1,
+          1,
+          null,
+          null
+        ]
+      }
+    },
+    "timestamp": 1676886200
+  }
+}

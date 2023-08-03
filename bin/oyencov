@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+unless File.exist?('./Gemfile')
+  abort 'Please run oyencov from the root of the project.'
+end
+
+require 'rubygems'
+begin
+  require 'bundler'
+  Bundler.setup
+rescue StandardError
+end
+
+here = File.expand_path(File.dirname __FILE__)
+$LOAD_PATH << "#{here}/../lib"
+
+require "oyencov/cli"
+OyenCov::CLI.start(ARGV)
