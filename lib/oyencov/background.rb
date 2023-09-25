@@ -57,9 +57,9 @@ module OyenCov
           response = @api_conn.post_runtime_report(runtime_report)
 
           if response && response.body["status"] == "ok"
-            puts "[OyenOnsen] POST runtime_report ok."
+            puts "[OyenCov] POST runtime_report ok."
           else
-            warn "[OyenOnsen] POST runtime_report failed. Stopping background thread."
+            warn "[OyenCov] POST runtime_report failed. Stopping background thread."
             Thread.stop
           end
         end # loop

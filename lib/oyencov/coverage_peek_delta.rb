@@ -28,7 +28,7 @@ module OyenCov
     def self.snapshot_delta
       current_peek = Coverage.peek_result
 
-      if ENV["OYENONSEN_DEBUG"]
+      if ENV["OYENCOV_DEBUG"]
         $stdout.puts "current_peek size = #{current_peek.size}, keys like: #{current_peek.keys[0, 3]}"
       end
 
@@ -39,7 +39,7 @@ module OyenCov
         k.gsub(/#{PWD}\//o, "")
       end
 
-      if ENV["OYENONSEN_DEBUG"]
+      if ENV["OYENCOV_DEBUG"]
         $stdout.puts "filtered size = #{filtered.size}, keys like: #{filtered.keys[0, 3]}"
       end
 
@@ -48,7 +48,7 @@ module OyenCov
         /^(app|lib)/.match?(k)
       end
 
-      if ENV["OYENONSEN_DEBUG"]
+      if ENV["OYENCOV_DEBUG"]
         $stdout.puts "filtered size = #{filtered.size}, keys like: #{filtered.keys[0, 3]}"
       end
 

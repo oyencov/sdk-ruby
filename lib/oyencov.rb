@@ -9,7 +9,7 @@ module OyenCov
     @config ||= OyenCov::Configuration.new
   end
 
-  if defined?(Rails::Railtie) && ENV["OYENONSEN_API_KEY"]
+  if defined?(Rails::Railtie) && ENV["OYENCOV_API_KEY"]
     require_relative "oyencov/railtie"
   end
 end

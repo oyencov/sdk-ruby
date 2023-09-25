@@ -1,4 +1,4 @@
-# We encourage configuring OyenOnsen through environment variables.
+# We encourage configuring OyenCov through environment variables.
 #
 # But some can be set through config/ if they are meant to be uniform across environments.
 module OyenCov
@@ -18,7 +18,7 @@ module OyenCov
     def initialize
       reset_to_defaults
       ENV_PARAMETERS.each do |key|
-        if (envvar_value = ENV["OYENONSEN_#{key}"])
+        if (envvar_value = ENV["OYENCOV_#{key}"])
           instance_variable_set(
             :"@#{key.downcase}", envvar_value
           )
