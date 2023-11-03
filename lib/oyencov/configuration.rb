@@ -29,10 +29,11 @@ module OyenCov
     def reset_to_defaults
       @api_key = nil
       @api_url = "https://telemetry-api.oyencov.com"
-      @mode = ENV["RAILS_ENV"]
+      @mode = ENV["OYENCOV_ENV"] || ENV["RAILS_ENV"]
       @including_file_paths = %w[app lib]
       @excluding_file_paths = []
       @release = suggest_release
+      @process_type = suggest_process_type
       @test_reporting_dir = "coverage/"
       @test_resultset_path = "coverage/oyencov-resultset.json"
     end
@@ -56,7 +57,26 @@ module OyenCov
     end
 
     # We need to know if this is rails, sidekiq, rake task etc
-    def suggest_program_name
+    #
+    # Method 1: $PROGRAM_NAME.split("/")[-1]
+    def suggest_process_type
+      answer = nil
+      sliced_program_name = File.basename($PROGRAM_NAME)
+
+      if %w[sidekiq resque].include?(sliced_program_name)
+        return sliced_program_name
+      end
+
+      # Rails can be server or rake task
+      if sliced_program_name == "rails"
+        if defined?(Rails) && Rails.respond_to?(:server) && !!Rails.server
+          return "rails server"
+        else
+          return "rake"
+        end
+      end
+
+      "-"
     end
   end
 end

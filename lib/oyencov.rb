@@ -9,7 +9,9 @@ module OyenCov
     @config ||= OyenCov::Configuration.new
   end
 
+  puts "[OyenCov] Checking Rails existence"
   if defined?(Rails::Railtie) && ENV["OYENCOV_API_KEY"]
+    puts "[OyenCov] Railstie running"
     require_relative "oyencov/railtie"
   end
 end

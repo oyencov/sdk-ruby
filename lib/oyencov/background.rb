@@ -23,7 +23,11 @@ module OyenCov
     @config = OyenCov.config
 
     def self.start
-      puts "Hello #{Rails.env}"
+      if ENV["OYENCOV_DEBUG"]
+        puts "Hello #{Rails.env}"
+        puts "$PROGRAM_NAME: #{$PROGRAM_NAME || "nil"}"
+        puts "@process_type: #{@config.process_type}"
+      end
 
       # Start `Coverage` as soon as possible before other codes are loaded
       CoveragePeekDelta.start
