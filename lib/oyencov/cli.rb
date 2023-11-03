@@ -1,7 +1,7 @@
 require "thor"
-require_relative "./api_connection"
-require_relative "./test_report_merger"
-require_relative "./simplecov_resultset_translator"
+require_relative "api_connection"
+require_relative "test_report_merger"
+require_relative "simplecov_resultset_translator"
 
 # Bootstrapped from `bin/oyencov`
 #

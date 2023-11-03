@@ -65,7 +65,6 @@ module OyenCov
       # Compare and delta
       new_method_hits = {}
       current_method_hits.each_pair do |method_name, counter|
-        if counter.nil?; puts method_name; end
         new_hits = counter - (@@previous_method_hits[method_name] || 0)
         if new_hits > 0
           new_method_hits[method_name] = new_hits

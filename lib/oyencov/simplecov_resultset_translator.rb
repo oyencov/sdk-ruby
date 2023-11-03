@@ -1,5 +1,5 @@
-require_relative "./method_range_parser"
-require_relative "./test_report_merger"
+require_relative "method_range_parser"
+require_relative "test_report_merger"
 
 # This is meant to be run at the end of the fan-out jobs, and the output
 #   artefacts are meant to be persisted for the next job in the workflow.
