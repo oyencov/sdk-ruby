@@ -46,7 +46,7 @@ module OyenCov
           puts(clearance.body)
         end
 
-        @config.mode == "production" && loop do
+        (@config.mode == "production" || @config.mode == "test") && loop do
           sleep(@loop_interval + 3 - rand(6))
           new_method_hits = CoveragePeekDelta.snapshot_delta
           new_controller_hits = ControllerTracking.snapshot_and_reset!
