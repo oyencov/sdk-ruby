@@ -10,7 +10,7 @@ module OyenCov
     end
 
     config.after_initialize do
-      # puts "lib/oyencov/railtie.rb config.after_initialize"
+      !!ENV["OYENCOV_DEBUG"] && puts("lib/oyencov/railtie.rb config.after_initialize")
       ActiveSupport::Notifications.subscribe("start_processing.action_controller") do |name, start, finish, id, payload|
         # puts(payload)
         ControllerTracking.bump("#{payload[:controller]}##{payload[:action]}")
@@ -18,6 +18,7 @@ module OyenCov
 
       if OyenCov.config.mode == "test"
         at_exit do
+          !!ENV["OYENCOV_DEBUG"] && puts("[OyenCov] Testing mode, persisting rails controller action data.")
           OyenCov::TestReporting.persist_controller_actions!
         end
       end

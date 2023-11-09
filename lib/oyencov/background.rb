@@ -24,29 +24,33 @@ module OyenCov
 
     def self.start
       if ENV["OYENCOV_DEBUG"]
-        puts "Hello #{Rails.env}"
-        puts "$PROGRAM_NAME: #{$PROGRAM_NAME || "nil"}"
-        puts "@process_type: #{@config.process_type}"
+        puts "[OyenCov] Env: #{Rails.env}"
+        puts "[OyenCov] $PROGRAM_NAME: #{$PROGRAM_NAME || "nil"}"
+        puts "[OyenCov] @process_type: #{@config.process_type}"
       end
 
       # Start `Coverage` as soon as possible before other codes are loaded
       CoveragePeekDelta.start
 
+      # This thread is for production reporting only.
       @thread = Thread.new {
         # Check with backend to get parameters
         sleep(3)
-        clearance = @api_conn.get_data_submission_clearance
 
-        if clearance.nil?
-          puts "Unable to obtain oyencov submission clearance. Stopping OyenCov background thread."
-          Thread.stop
+        if @config.mode == "production"
+          clearance = @api_conn.get_data_submission_clearance
+
+          if clearance.nil?
+            puts "[OyenCov] Unable to obtain oyencov submission clearance. Stopping OyenCov background thread."
+            Thread.stop
+          end
+
+          if ENV["OYENCOV_DEBUG"]
+            puts(clearance.body)
+          end
         end
 
-        if ENV["OYENCOV_DEBUG"]
-          puts(clearance.body)
-        end
-
-        (@config.mode == "production" || @config.mode == "test") && loop do
+        @config.mode == "production" && loop do
           sleep(@loop_interval + 3 - rand(6))
           new_method_hits = CoveragePeekDelta.snapshot_delta
           new_controller_hits = ControllerTracking.snapshot_and_reset!
