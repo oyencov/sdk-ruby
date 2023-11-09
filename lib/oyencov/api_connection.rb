@@ -1,5 +1,6 @@
 require "faraday"
 require "singleton"
+require_relative "version"
 
 module OyenCov
   class APIConnection < Faraday::Connection
@@ -11,7 +12,7 @@ module OyenCov
         headers: {
           "Authorization" => "Bearer #{ENV["OYENCOV_API_KEY"]}",
           "Content-Type" => "application/json",
-          "User-Agent" => "oyencov-ruby 0.0.1"
+          "User-Agent" => "oyencov-ruby #{OyenCov::VERSION}"
         }
       }) do |f|
         f.request :json
