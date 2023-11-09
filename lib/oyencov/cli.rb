@@ -27,11 +27,12 @@ module OyenCov
       simplecov_json_path = Dir.pwd + "/" + options[:simplecov_json_path]
 
       # Find existing resultset files
+      # We can start with empty JSON instead of exiting with error
       if File.exist?(oyencov_json_path)
         oyencov_json = File.read(oyencov_json_path)
       else
-        warn("Could not find existing oyencov-resultset.json at #{oyencov_json_path}")
-        exit(1)
+        warn("Could not find existing oyencov-resultset.json at #{oyencov_json_path}.")
+        oyencov_json = "{}"
       end
 
       warn "Starting to translate simplecov"
@@ -43,7 +44,7 @@ module OyenCov
         exit(1)
       end
 
-      warn "AFTER translate simplecov"
+      warn "Done translating simplecov"
 
       # Attempt merging
       oyencov_resultset = JSON.parse(oyencov_json)
@@ -56,6 +57,8 @@ module OyenCov
       else
         File.write(oyencov_json_path, new_oyencov_resultset_json)
       end
+
+      warn "Saved oyencov resultset to: #{oyencov_json_path}"
     end
 
     desc "submit tmp/coverage-jsons-*/oyencov-resultset.json",
