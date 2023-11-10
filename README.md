@@ -1,5 +1,7 @@
 # OyenCov Client SDK for Ruby on Rails
 
+[![Gem Version](https://badge.fury.io/rb/oyencov.svg)](https://badge.fury.io/rb/oyencov)
+
 ## Installation
 
 Please refer to [docs.oyencov.com](https://docs.oyencov.com) for the latest setup instructions for your codebase and CI.
