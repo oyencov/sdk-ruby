@@ -63,7 +63,7 @@ module OyenCov
 
     desc "submit tmp/coverage-jsons-*/oyencov-resultset.json",
       "submits the oyencov resultsets data"
-    option :files, type: :array, required: true
+    option :files, type: :array, default: ["coverage/oyencov-resultset.json"]
     option :git_commit_sha, required: true
     option :token
     def submit
