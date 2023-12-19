@@ -1,6 +1,7 @@
 require "faraday"
 require "singleton"
 require_relative "version"
+require_relative "logger"
 
 module OyenCov
   class APIConnection < Faraday::Connection
@@ -26,9 +27,7 @@ module OyenCov
       begin
         response = get("/v1/data_submission_clearance")
       rescue Faraday::Error => e
-        if ENV["OYENCOV_DEBUG"]
-          warn(e)
-        end
+        OyenCov::Logger.log(e, level = 2)
 
         if attempts > 0
           attempts -= 1

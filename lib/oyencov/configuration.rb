@@ -13,7 +13,7 @@ module OyenCov
       PROGRAM_NAME
     ]
 
-    attr :api_key, :api_url, :mode, :including_file_paths, :excluding_file_paths, :release, :test_reporting_dir, :test_resultset_path, :program_name, :process_type
+    attr_reader :api_key, :api_url, :mode, :including_file_paths, :excluding_file_paths, :release, :test_reporting_dir, :test_resultset_path, :program_name, :process_type
 
     def initialize
       reset_to_defaults

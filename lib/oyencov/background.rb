@@ -2,6 +2,7 @@ require "securerandom"
 require "singleton"
 require_relative "api_connection"
 require_relative "coverage_peek_delta"
+require_relative "logger"
 
 # Bootstrap the thread that starts Coverage module data collection.
 #
@@ -23,11 +24,12 @@ module OyenCov
     @config = OyenCov.config
 
     def self.start
-      if ENV["OYENCOV_DEBUG"]
-        puts "[OyenCov] Env: #{Rails.env}"
-        puts "[OyenCov] $PROGRAM_NAME: #{$PROGRAM_NAME || "nil"}"
-        puts "[OyenCov] @process_type: #{@config.process_type}"
-      end
+      OyenCov::Logger.log(<<~TXT)
+        Env: #{@config.mode}
+        $PROGRAM_NAME: #{$PROGRAM_NAME || "nil"}
+        @process_type: #{@config.process_type}
+        Env vars set: #{ENV.keys.grep(/^OYENCOV_/)}
+      TXT
 
       # Start `Coverage` as soon as possible before other codes are loaded
       CoveragePeekDelta.start
@@ -41,21 +43,22 @@ module OyenCov
           clearance = @api_conn.get_data_submission_clearance
 
           if clearance.nil?
-            puts "[OyenCov] Unable to obtain oyencov submission clearance. Stopping OyenCov background thread."
+            OyenCov::Logger.log "Unable to obtain oyencov submission clearance. Stopping OyenCov background thread."
             Thread.stop
           end
 
-          if ENV["OYENCOV_DEBUG"]
-            puts(clearance.body)
-          end
+          # OyenCov::Logger.log("clearance.body:-\n" + clearance.body)
         end
 
         @config.mode == "production" && loop do
           sleep(@loop_interval + 3 - rand(6))
           new_method_hits = CoveragePeekDelta.snapshot_delta
+
+          OyenCov::Logger.log "ControllerTracking.hits = #{ControllerTracking.hits}"
+
           new_controller_hits = ControllerTracking.snapshot_and_reset!
 
-          puts new_method_hits
+          OyenCov::Logger.log "" + new_method_hits
 
           runtime_report = {
             git_commit_sha: @config.release,
@@ -65,9 +68,9 @@ module OyenCov
           response = @api_conn.post_runtime_report(runtime_report)
 
           if response && response.body["status"] == "ok"
-            puts "[OyenCov] POST runtime_report ok."
+            OyenCov::Logger.log "POST runtime_report ok."
           else
-            warn "[OyenCov] POST runtime_report failed. Stopping background thread."
+            OyenCov::Logger.log "POST runtime_report failed. Stopping background thread."
             Thread.stop
           end
         end # loop

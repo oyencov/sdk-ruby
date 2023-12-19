@@ -1,5 +1,6 @@
 require "coverage"
 require_relative "method_range_parser"
+require_relative "logger"
 
 # `CoveragePeekDelta` utility is meant to take...
 #
@@ -28,9 +29,7 @@ module OyenCov
     def self.snapshot_delta
       current_peek = Coverage.peek_result
 
-      if ENV["OYENCOV_DEBUG"]
-        $stdout.puts "current_peek size = #{current_peek.size}, keys like: #{current_peek.keys[0, 3]}"
-      end
+      # OyenCov::Logger.log "1st current_peek size = #{current_peek.size}, keys like: #{current_peek.keys[0, 3]}"
 
       # Filter into project
       filtered = current_peek.select do |k, _|
@@ -39,18 +38,14 @@ module OyenCov
         k.gsub(/#{PWD}\//o, "")
       end
 
-      if ENV["OYENCOV_DEBUG"]
-        $stdout.puts "filtered size = #{filtered.size}, keys like: #{filtered.keys[0, 3]}"
-      end
+      # OyenCov::Logger.log "2nd filtered size = #{filtered.size}, keys like: #{filtered.keys[0, 3]}"
 
       # Filter inside project to just the paths
       filtered = filtered.select do |k, _|
         /^(app|lib)/.match?(k)
       end
 
-      if ENV["OYENCOV_DEBUG"]
-        $stdout.puts "filtered size = #{filtered.size}, keys like: #{filtered.keys[0, 3]}"
-      end
+      # OyenCov::Logger.log "3rd filtered size = #{filtered.size}, keys like: #{filtered.keys[0, 3]}"
 
       # Find the method ranges, set
       current_method_hits = {}

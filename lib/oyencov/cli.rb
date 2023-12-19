@@ -2,6 +2,7 @@ require "thor"
 require_relative "api_connection"
 require_relative "test_report_merger"
 require_relative "simplecov_resultset_translator"
+require_relative "logger"
 
 # Bootstrapped from `bin/oyencov`
 #
@@ -68,12 +69,12 @@ module OyenCov
     option :token
     def submit
       resultset_files = options[:files]
-      ENV["OYENCOV_DEBUG"] && if resultset_files.any?
-                                puts "Found #{resultset_files.join(", ")}"
-                              else
-                                puts "No resultset files found"
-                                exit 1
-                              end
+      if resultset_files.any?
+        OyenCov::Logger.log "Found #{resultset_files.join(", ")}"
+      else
+        puts "No resultset files found"
+        exit 1
+      end
 
       collated_report = OyenCov::TestReportMerger
         .collate_job_reports(options[:files])
