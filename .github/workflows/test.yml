@@ -9,7 +9,7 @@ on:
   push:
     paths:
       - 'lib/oyencov/**'
-      - '.github/workflows/oyencov-gem.yml'
+      - '.github/workflows/test.yml'
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.1", "3.2", "head"]
+        ruby: ["3.1", "3.2", head]
     env:
       RAILS_ENV: test
       RUBY_VERSION: ${{ matrix.ruby }}
