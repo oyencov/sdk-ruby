@@ -53,18 +53,21 @@ module OyenCov
         @config.mode == "production" && loop do
           sleep(@loop_interval + 3 - rand(6))
           new_method_hits = CoveragePeekDelta.snapshot_delta
-
           OyenCov::Logger.log "ControllerTracking.hits = #{ControllerTracking.hits}"
-
           new_controller_hits = ControllerTracking.snapshot_and_reset!
 
-          OyenCov::Logger.log "" + new_method_hits
-
           runtime_report = {
-            git_commit_sha: @config.release,
             controller_action_hits: new_controller_hits,
             method_hits: new_method_hits
           }
+
+          unless runtime_report.values.any?(&:any?)
+            OyenCov::Logger.log("All #{runtime_report.keys.join(", ")} are empty. Skipping submission.")
+            next
+          end
+
+          runtime_report[:git_commit_sha] = @config.release
+
           response = @api_conn.post_runtime_report(runtime_report)
 
           if response && response.body["status"] == "ok"
@@ -73,6 +76,8 @@ module OyenCov
             OyenCov::Logger.log "POST runtime_report failed. Stopping background thread."
             Thread.stop
           end
+
+          # TODO: Set new interval & wiggle.
         end # loop
       }
 
