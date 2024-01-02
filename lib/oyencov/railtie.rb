@@ -5,18 +5,34 @@ require_relative "logger"
 
 module OyenCov
   class Railtie < Rails::Railtie
+    def install_puma_hooks
+      return unless defined?(Puma)
+      OyenCov::Logger.log("Puma defined, installing puma hooks")
+
+      begin
+        require "puma/plugin"
+      rescue LoadError => e
+        OyenCov::Logger.log("Load errors: #{e}")
+      end
+
+      # # Cluster mode
+      if defined?(Puma::Plugin)
+        OyenCov::Logger.log("Puma::Plugin defined, installing hooks for CLUSTER MODE")
+        require_relative "puma/plugin/oyencov"
+      end
+    end
+
     initializer "oyencov.configure" do
-      # puts "lib/oyencov/railtie.rb initializer oyencov.configure"
       OyenCov::Background.start
+      install_puma_hooks
     end
 
     config.after_initialize do
       OyenCov::Logger.log("lib/oyencov/railtie.rb config.after_initialize")
-      # OyenCov::Logger.log("This is development copy")
+
       ActiveSupport::Notifications.subscribe("start_processing.action_controller") do |name, start, finish, id, payload|
-        # puts(payload)
         ControllerTracking.bump("#{payload[:controller]}##{payload[:action]}")
-        puts "ControllerTracking.bump(#{payload[:controller]}##{payload[:action]})"
+        OyenCov::Logger.log "ControllerTracking.bump(#{payload[:controller]}##{payload[:action]})"
       end
 
       if OyenCov.config.mode == "test"
