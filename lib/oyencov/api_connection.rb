@@ -27,7 +27,7 @@ module OyenCov
       begin
         response = get("/v1/data_submission_clearance")
       rescue Faraday::Error => e
-        OyenCov::Logger.log(e, level = 2)
+        OyenCov::Logger.log(e, 2)
 
         if attempts > 0
           attempts -= 1

@@ -36,7 +36,7 @@ module OyenCov
       all_methods_hits = resultset[resultset.keys[0]]["coverage"].each_pair.map do |file_path, file_attr|
         # file_path = file_path.gsub(/#{PWD}\//o, "")
         line_hits = file_attr["lines"]
-        methods_hits = MethodRangeParser[file_path]&.each_pair&.map do |method_name, line_num|
+        MethodRangeParser[file_path]&.each_pair&.map do |method_name, line_num|
           next if line_num.nil? || line_hits[line_num].nil?
           [method_name, line_hits[line_num]]
         end&.compact.to_h

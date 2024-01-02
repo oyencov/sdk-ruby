@@ -60,7 +60,6 @@ module OyenCov
     #
     # Method 1: $PROGRAM_NAME.split("/")[-1]
     def suggest_process_type
-      answer = nil
       sliced_program_name = File.basename($PROGRAM_NAME)
 
       if %w[sidekiq resque].include?(sliced_program_name)
