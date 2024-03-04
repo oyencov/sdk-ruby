@@ -66,6 +66,12 @@ module OyenCov
         return sliced_program_name
       end
 
+      if /(rake|rails)$/.match?(sliced_program_name)
+        if defined?(Rake::Task) && Rake::Task.tasks.any?
+          return "rake"
+        end
+      end
+
       if /^puma/.match?($PROGRAM_NAME)
         if defined?(Rails)
           return "rails-server"
@@ -73,7 +79,7 @@ module OyenCov
       end
 
       # Rails can be server or rake task
-      if sliced_program_name == "rails"
+      if /rails$/.match?(sliced_program_name)
         if defined?(Rails)
           if Rails.const_defined?(:Server)
             return "rails-server"
@@ -81,7 +87,7 @@ module OyenCov
             return "rails-console"
           end
         else
-          return "rake-task"
+          "-"
         end
       end
 
