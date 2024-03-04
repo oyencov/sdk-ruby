@@ -67,8 +67,11 @@ module OyenCov
           end
 
           runtime_report[:git_commit_sha] = @config.release
+          runtime_report[:process_type] = @config.process_type
 
           response = @api_conn.post_runtime_report(runtime_report)
+
+          OyenCov::Logger.log("POST-ing runtime_report: #{runtime_report.to_json}")
 
           if response && response.body["status"] == "ok"
             OyenCov::Logger.log "POST runtime_report ok."
