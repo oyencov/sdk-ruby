@@ -9,7 +9,7 @@ module OyenCov
 
     def initialize
       super({
-        url: (ENV["OYENCOV_API_URL"] || "https://telemetry-api.oyencov.com"),
+        url: ENV["OYENCOV_API_URL"] || "https://telemetry-api.oyencov.com",
         headers: {
           "Authorization" => "Bearer #{ENV["OYENCOV_API_KEY"]}",
           "Content-Type" => "application/json",
