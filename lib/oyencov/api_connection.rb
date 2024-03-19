@@ -26,6 +26,12 @@ module OyenCov
       attempts = 3
       begin
         response = get("/v1/data_submission_clearance")
+
+        if Hash === response.body && response.body["status"] == "ok"
+          return response.body
+        else
+          return false
+        end
       rescue Faraday::Error => e
         OyenCov::Logger.log(e, 2)
 
@@ -36,8 +42,6 @@ module OyenCov
         end
         nil
       end
-
-      response
     end
 
     def post_runtime_report(body)

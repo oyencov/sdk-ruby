@@ -42,12 +42,12 @@ module OyenCov
         if @config.mode == "production"
           clearance = @api_conn.get_data_submission_clearance
 
-          if clearance.nil?
+          unless clearance && clearance["status"] == "ok"
             OyenCov::Logger.log "Unable to obtain oyencov submission clearance. Stopping OyenCov background thread."
             Thread.stop
           end
 
-          # OyenCov::Logger.log("clearance.body:-\n" + clearance.body)
+          @loop_interval = clearance["runtime_report_submission"]["interval"]
         end
 
         @config.mode == "production" && loop do
