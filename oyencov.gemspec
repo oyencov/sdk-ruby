@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
     "bug_tracker_uri" => "https://github.com/oyencov/sdk-ruby/issues"
   }
 
-  s.required_ruby_version = ">= 3.1.0"
+  s.required_ruby_version = ">= 2.7.0"
 
   s.add_development_dependency "rake", "~> 13.1"
   s.add_development_dependency "minitest", "~> 5.20"
