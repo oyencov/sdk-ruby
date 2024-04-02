@@ -13,7 +13,7 @@ module OyenCov
       test_report_path = OyenCov.config.test_resultset_path
 
       report_content = {
-        controller_action_hits:
+        controller_action_hits: controller_action_hits
       }
 
       report_content_json = JSON.generate(report_content)
