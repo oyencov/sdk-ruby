@@ -24,11 +24,6 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = ">= 2.7.0"
 
-  s.add_development_dependency "rake", "~> 13.1"
-  s.add_development_dependency "minitest", "~> 5.20"
-  s.add_development_dependency "mocha", "~> 2.1"
-  s.add_development_dependency "standard", "~> 1.33"
-
   s.add_runtime_dependency "faraday", ">= 1.0", "< 3.0"
   s.add_runtime_dependency "parser", ">= 2", "< 4.0"
   s.add_runtime_dependency "thor", ">= 1.0", "< 2.0"
