@@ -28,9 +28,9 @@ module OyenCov
         response = get("/v1/data_submission_clearance")
 
         if Hash === response.body && response.body["status"] == "ok"
-          return response.body
+          response.body
         else
-          return false
+          false
         end
       rescue Faraday::Error => e
         OyenCov::Logger.log(e, 2)
