@@ -9,6 +9,8 @@ module OyenCov
     @config ||= OyenCov::Configuration.new
   end
 
+  OyenCov::Logger.log("Hello! Booting from #{__FILE__}")
+  
   OyenCov::Logger.log("Checking Rails existence")
   if defined?(Rails::Railtie) # && ENV["OYENCOV_API_KEY"]
     OyenCov::Logger.log("Starting Railtie")

@@ -46,11 +46,24 @@ module OyenCov
 
       if release == "" || release.nil?
         [".source_version", "REVISION"].each do |version_clue|
-          if File.exist?(Rails.root.join(version_clue))
-            release = File.read(Rails.root.join(version_clue)).strip
-            return release
+          version_clue_path = if defined?(Rails.root) && Rails.root
+            Rails.root.join(version_clue)
+          elsif defined?(Bundler.root) && Bundler.root
+            Bundler.root.join(version_clue)
+          elsif defined?(Pathname.pwd) && Pathname.pwd
+            Pathname.pwd.join(version_clue)
+          else next
+          end
+
+          if File.exist?(version_clue_path)
+            return File.read(version_clue_path).strip
           end
         end
+      end
+
+      # Last resort, prevent null value.
+      if release == "" || release.nil?
+        release = "-"
       end
 
       release
