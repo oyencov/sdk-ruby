@@ -5,6 +5,7 @@ require_relative "logger"
 
 module OyenCov
   class Railtie < Rails::Railtie
+    # This is only useful when `rails s` is run in lieu of webserver command first.
     def install_puma_hooks
       return unless defined?(Puma)
       OyenCov::Logger.log("Puma defined, installing puma hooks")
@@ -15,7 +16,7 @@ module OyenCov
         OyenCov::Logger.log("Load errors: #{e}")
       end
 
-      # # Cluster mode
+      # Cluster mode
       if defined?(Puma::Plugin)
         OyenCov::Logger.log("Puma::Plugin defined, installing hooks for CLUSTER MODE")
         require_relative "puma/plugin/oyencov"

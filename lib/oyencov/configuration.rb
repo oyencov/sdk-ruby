@@ -52,7 +52,8 @@ module OyenCov
             Bundler.root.join(version_clue)
           elsif defined?(Pathname.pwd) && Pathname.pwd
             Pathname.pwd.join(version_clue)
-          else next
+          else
+            next
           end
 
           if File.exist?(version_clue_path)
@@ -85,10 +86,13 @@ module OyenCov
         end
       end
 
-      if /^puma/.match?($PROGRAM_NAME)
-        if defined?(Rails)
-          return "rails-server"
-        end
+      # If its cluster mode & we are in worker process, puma is at the beginning.
+      # If it's `bundle exec puma` then it comes in the end
+      #
+      # If it's booted up by puma not rails server, `Rails` module wont be defined.
+      # We will just assume puma = rails-server
+      if /^puma/.match?($0) || sliced_program_name == "puma"
+        return "rails-server"
       end
 
       # Rails can be server or rake task

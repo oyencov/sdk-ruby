@@ -1,6 +1,7 @@
 require "securerandom"
 require "singleton"
 require_relative "api_connection"
+require_relative "controller_tracking"
 require_relative "coverage_peek_delta"
 require_relative "logger"
 
@@ -26,8 +27,9 @@ module OyenCov
     def self.start
       OyenCov::Logger.log(<<~TXT)
         Env: #{@config.mode}
-        $PROGRAM_NAME: #{$PROGRAM_NAME || "nil"}
-        @process_type: #{@config.process_type}
+        program_name: #{$PROGRAM_NAME || "nil"}
+        process_type: #{@config.process_type}
+        release/git_commit_sha: #{@config.release}
         Env vars set: #{ENV.keys.grep(/^OYENCOV_/)}
       TXT
 
