@@ -82,11 +82,9 @@ module OyenCov
           "git_commit_sha" => options[:git_commit_sha]
         })
 
-      # puts JSON.pretty_generate(collated_report)
-
-      # Add metadaata
-
-      ENV["OYENCOV_API_KEY"] ||= options[:token]
+      if options[:token]
+        ENV["OYENCOV_API_KEY"] = options[:token]
+      end
       unless ENV["OYENCOV_API_KEY"]
         warn "API token not set. Unable to submit."
         exit(1)
