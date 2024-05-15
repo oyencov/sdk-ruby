@@ -42,7 +42,7 @@ module OyenCov
 
     # Lots of ideas came from sentry-ruby, thanks to nate berkopec.
     def suggest_release
-      release = `git rev-parse HEAD ||:`.strip
+      release = `git rev-parse HEAD 2>/dev/null || true`.strip
 
       if release == "" || release.nil?
         [".source_version", "REVISION"].each do |version_clue|
