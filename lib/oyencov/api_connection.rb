@@ -27,7 +27,7 @@ module OyenCov
       begin
         response = get("/v1/data_submission_clearance")
 
-        if Hash === response.body && response.body["status"] == "ok"
+        if Hash === response.body # && response.body["status"] == "ok"
           response.body
         else
           false

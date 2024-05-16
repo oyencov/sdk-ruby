@@ -5,6 +5,8 @@ require_relative "logger"
 
 module OyenCov
   class Railtie < Rails::Railtie
+    @@controller_tracker_notification = nil
+
     # This is only useful when `rails s` is run in lieu of webserver command first.
     def install_puma_hooks
       return unless defined?(Puma)
@@ -26,12 +28,14 @@ module OyenCov
     initializer "oyencov.configure" do
       OyenCov::Background.start
       install_puma_hooks
-    end
 
-    config.after_initialize do
-      OyenCov::Logger.log("lib/oyencov/railtie.rb config.after_initialize")
+      if @@controller_tracker_notification.nil?
+        OyenCov::Logger.log "@@controller_tracker_notification is nil"
+      else
+        OyenCov::Logger.log "@@controller_tracker_notification is already set, Railtie init rerun."
+      end
 
-      ActiveSupport::Notifications.subscribe("start_processing.action_controller") do |name, start, finish, id, payload|
+      @@controller_tracker_notification ||= ActiveSupport::Notifications.subscribe("start_processing.action_controller") do |name, start, finish, id, payload|
         ControllerTracking.bump("#{payload[:controller]}##{payload[:action]}")
         OyenCov::Logger.log "ControllerTracking.bump(#{payload[:controller]}##{payload[:action]})"
       end

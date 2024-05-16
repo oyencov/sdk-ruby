@@ -12,7 +12,7 @@ module OyenCov
       if Exception === msg
         msg = msg.inspect
       end
-      formatted_msg = msg.split("\n").map { |m| "#{ORANGE_TEXT}[OyenCov] #{m}#{RESET_COLOR}" }.join("\n")
+      formatted_msg = msg.split("\n").map { |m| "#{ORANGE_TEXT}[OyenCov] PID##{$$} #{m}#{RESET_COLOR}" }.join("\n")
 
       if level == 2
         warn formatted_msg

@@ -17,14 +17,24 @@ require_relative "logger"
 #
 module OyenCov
   class Background
+    # Added to be more fork-aware. Ruby/Puma can fork a process copy-on-write, 
+    #   but it won't start the threads that are running in the parent process.
+    # 
+    # If the PID > 0 but also not the current process_id, make the thread run.
+    @@running_pid = 0
+
     @loop_interval = 60 # seconds, can be set from server
-    @semaphore = Mutex.new
     @thread = nil
     @reporter = nil
     @api_conn = OyenCov::APIConnection.instance
     @config = OyenCov.config
 
     def self.start
+      if @@running_pid == $$
+        OyenCov::Logger.log("OyenCov Background thread is already running.")
+        return false
+      end
+
       OyenCov::Logger.log(<<~TXT)
         Env: #{@config.mode}
         program_name: #{$PROGRAM_NAME || "nil"}
@@ -45,7 +55,7 @@ module OyenCov
           clearance = @api_conn.get_data_submission_clearance
 
           unless clearance && clearance["status"] == "ok"
-            OyenCov::Logger.log "Unable to obtain oyencov submission clearance. Stopping OyenCov background thread."
+            OyenCov::Logger.log "Unable to obtain oyencov submission clearance. Stopping OyenCov background thread. #{clearance.inspect}"
             Thread.stop
           end
 
@@ -79,6 +89,7 @@ module OyenCov
             OyenCov::Logger.log "POST runtime_report ok."
           else
             OyenCov::Logger.log "POST runtime_report failed. Stopping background thread."
+            @@running_pid = 0
             Thread.stop
           end
 
@@ -87,6 +98,8 @@ module OyenCov
       }
 
       @thread.run
+      OyenCov::Logger.log("OyenCov Background thread starts.")
+      @@running_pid = $$
 
       nil
     end
@@ -95,6 +108,7 @@ module OyenCov
     # For `test`, persist controller report.
     def self.stop
       @thread.stop
+      @@running_pid = 0
     end
 
     private_class_method

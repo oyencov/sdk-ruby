@@ -11,14 +11,20 @@ module OyenCov
 
   # Sometimes oyencov cant start on their own, maybe when oyencov is loaded
   #   before Rails did.
-  # 
+  #
   # For Rails, put `OyenCov.start!` in `config/initializers/oyencov.rb`.
   def self.start!
     require_relative "oyencov/railtie"
   end
 
   OyenCov::Logger.log("Hello! Booting from #{__FILE__}")
-  OyenCov::Logger.log("Checking Rails existence")
+  OyenCov::Logger.log("Checking/Forcing Rails existence")
+
+  begin
+    require "rails"
+  rescue LoadError
+    # do nothing
+  end
 
   if defined?(Rails::Railtie) # && ENV["OYENCOV_API_KEY"]
     OyenCov::Logger.log("Rails::Railtie already present, starting oyencov/railtie")
