@@ -52,8 +52,8 @@ module OyenCov
       filtered.each_pair do |fpath, line_hits|
         MethodRangeParser[fpath]&.each_pair do |method_name, line_num|
           # puts [method_name, line_num, line_hits[line_num]]
-          next if line_num.nil? || line_hits[line_num].nil?
-          current_method_hits[method_name] = line_hits[line_num]
+          next if line_num.nil? || line_hits[line_num - 1].nil?
+          current_method_hits[method_name] = line_hits[line_num - 1]
         end
       end
 
