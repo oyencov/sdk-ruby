@@ -10,9 +10,11 @@ class MethodRangeParserTest < Minitest::Test
 
   def test_return_expected_hash
     assert_equal(@parser.to_h, {
+      # "Everywhere#bagel!" => 3,
       "EverythingAllAtOnce.class_method" => 13,
       "EverythingAllAtOnce#whatever" => 22,
-      "EverythingAllAtOnce#rails_controller_lineless" => nil
+      "EverythingAllAtOnce#rails_controller_lineless" => nil,
+      "EverythingAllAtOnce#multiple_begins" => 34,
     })
   end
 end

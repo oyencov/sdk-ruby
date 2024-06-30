@@ -25,6 +25,7 @@ module OyenCov
     # @return [Hash<String, >] Hash of methods to their children starting line count. The line count can be used to read how often the method is executed from `Coverage.peek_result`
     private_class_method def self.parse_file(filepath)
       traverse_ast(Parser::CurrentRuby.parse(File.read(filepath)))
+        .reverse
         .to_h
         .select do |k, v|
           /\.|\#/.match?(k)

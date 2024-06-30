@@ -29,4 +29,9 @@ class EverythingAllAtOnce < HashBrown
 
   def rails_controller_lineless
   end
+
+  def multiple_begins
+    puts "this should be the line number"
+    (puts "this shouldnt be the line number")
+  end
 end
