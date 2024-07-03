@@ -79,11 +79,10 @@ module OyenCov
 
       node_children = node.children.find do |i|
         Parser::AST::Node === i && i.type == :begin
-      end&.children || [node.children[-1]]
+      end&.children || node.children
 
       ownself_name = declaration_name(node)
       ownself_range = definition_line_num(node)
-
       children_name_range = []
 
       node_children&.each do |cnode|
