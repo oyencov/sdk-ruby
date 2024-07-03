@@ -37,8 +37,8 @@ module OyenCov
         # file_path = file_path.gsub(/#{PWD}\//o, "")
         line_hits = file_attr["lines"]
         MethodRangeParser[file_path]&.each_pair&.map do |method_name, line_num|
-          next if line_num.nil? || line_hits[line_num].nil?
-          [method_name, line_hits[line_num]]
+          next if line_num.nil? || line_hits[line_num - 1].nil?
+          [method_name, line_hits[line_num - 1]]
         end&.compact.to_h
         # methods_hits
       end.reduce(:merge)
