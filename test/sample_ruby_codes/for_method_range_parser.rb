@@ -42,14 +42,11 @@ class AnotherClass < HashBrown
   include Everywhere
 
   def self.sample_class_method(arg1 = "nope", arg2: "nope")
-    
     puts "class method"
     puts "somemore"
   end
 
   def sample_instance_method
-    
-
     puts "this should be the line number"
     (puts "this shouldnt be the line number")
   end

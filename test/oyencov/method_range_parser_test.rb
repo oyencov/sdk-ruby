@@ -16,7 +16,7 @@ class MethodRangeParserTest < Minitest::Test
       "EverythingAllAtOnce#rails_controller_lineless" => nil,
       "EverythingAllAtOnce#multiple_begins" => 34,
       "AnotherClass.sample_class_method" => 46,
-      "AnotherClass#sample_instance_method" => 53,
+      "AnotherClass#sample_instance_method" => 53
     })
   end
 

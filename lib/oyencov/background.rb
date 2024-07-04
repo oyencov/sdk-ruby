@@ -17,9 +17,9 @@ require_relative "logger"
 #
 module OyenCov
   class Background
-    # Added to be more fork-aware. Ruby/Puma can fork a process copy-on-write, 
+    # Added to be more fork-aware. Ruby/Puma can fork a process copy-on-write,
     #   but it won't start the threads that are running in the parent process.
-    # 
+    #
     # If the PID > 0 but also not the current process_id, make the thread run.
     @@running_pid = 0
 
