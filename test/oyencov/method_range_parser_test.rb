@@ -19,4 +19,9 @@ class MethodRangeParserTest < Minitest::Test
       "AnotherClass#sample_instance_method" => 53,
     })
   end
+
+  def test_not_crashing_on_empty_ruby_file
+    empty_parser = OyenCov::MethodRangeParser["tmp/test/empty.rb"]
+    assert_equal(empty_parser, {})
+  end
 end
