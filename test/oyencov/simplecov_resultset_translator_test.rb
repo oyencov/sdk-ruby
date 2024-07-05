@@ -43,4 +43,20 @@ class SimplecovResultTranslatorTest < Minitest::Test
     assert_equal(1, @translated["OyenCov::Configuration#initialize"])
     assert_nil(@translated["OyenCov::APIConnection#get_data_submissijon_clearance"])
   end
+
+  def test_handles_missing_rb_files
+    orig_resultset_json_path = File
+      .expand_path(
+        "../sample_test_reports/simplecov/with_missing_file/.resultset.json",
+        File.dirname(__FILE__))
+    orig_resultset_json = File.read(orig_resultset_json_path)
+    tmp_resultset_json = orig_resultset_json.gsub(/\$PROJECT_PATH/o, Dir.pwd)
+    tmp_resultset_json_file = File.expand_path("tmp/test/simplecov-resultset.json")
+    FileUtils.mkdir_p(File.dirname(@tmp_resultset_json_file))
+    File.write(@tmp_resultset_json_file, tmp_resultset_json)
+
+    # assert nothing raised
+    translated = OyenCov::SimplecovResultsetTranslator.translate(tmp_resultset_json_file)
+    assert_empty(translated)
+  end
 end

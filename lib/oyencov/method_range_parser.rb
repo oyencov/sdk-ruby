@@ -1,4 +1,5 @@
 require "parser/current"
+require_relative "logger"
 
 # This module helps scanning source code files and get the definition line
 #   ranges, so we can count how many times a method has been executed.
@@ -24,6 +25,10 @@ module OyenCov
     #
     # @return [Hash<String, >] Hash of methods to their children starting line count. The line count can be used to read how often the method is executed from `Coverage.peek_result`
     private_class_method def self.parse_file(filepath)
+      unless File.exist?(filepath)
+        return nil
+      end
+
       ast = traverse_ast(Parser::CurrentRuby.parse(File.read(filepath))) || []
       ast.reverse
         .to_h

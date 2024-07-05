@@ -1,0 +1,25 @@
+{
+  "Minitest": {
+    "coverage": {
+      "$PROJECT_PATH/lib/dont/exist.rb": {
+        "lines": [
+          1,
+          null,
+          null,
+          1,
+          1,
+          null,
+          1,
+          2,
+          null,
+          null,
+          1,
+          1,
+          null,
+          null
+        ]
+      }
+    },
+    "timestamp": 1676886200
+  }
+}
