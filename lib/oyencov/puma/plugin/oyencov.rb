@@ -8,7 +8,7 @@ defined?(Puma::Plugin.create) && Puma::Plugin.create do
   def config(c)
     OyenCov::Logger.log("Puma::Plugin.create config(c) running...")
 
-    c.on_booted do
+    defined?(c.on_booted) && c.on_booted do
       OyenCov::Logger.log("Puma::Plugin.create config on_booted called")
       OyenCov::Background.start
       if defined?(Rails::Railtie)
@@ -18,7 +18,7 @@ defined?(Puma::Plugin.create) && Puma::Plugin.create do
       end
     end
 
-    c.on_worker_boot do
+    defined?(c.on_worker_boot) && c.on_worker_boot do
       OyenCov::Logger.log("Puma::Plugin.create config on_worker_boot called")
       OyenCov::Background.start
       if defined?(Rails::Railtie)
